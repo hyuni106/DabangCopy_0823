@@ -1,12 +1,26 @@
 package kr.co.tjeit.dabangcopy;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import kr.co.tjeit.dabangcopy.adapter.SubwayAdapter;
+import kr.co.tjeit.dabangcopy.datas.Subway;
+import kr.co.tjeit.dabangcopy.util.GlobalData;
+import kr.co.tjeit.dabangcopy.util.SoundSearcher;
 
 public class SearchActivity extends BaseActivity {
 
@@ -20,11 +34,16 @@ public class SearchActivity extends BaseActivity {
 
     int tabNum = 0;
     private android.widget.TabHost tabHost;
+    private android.widget.EditText searchEdt;
+    private android.widget.ListView subwayListView;
+    List<Subway> mDisplaySubwayArray = new ArrayList<>();
+    SubwayAdapter subwayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        mDisplaySubwayArray.addAll(GlobalData.stations);
         tabNum = getIntent().getIntExtra("tab", 0);
         bindViews();
         makeTabHost();
@@ -63,11 +82,84 @@ public class SearchActivity extends BaseActivity {
                 finish();
             }
         });
+
+        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                switch (tabId) {
+                    case "tab1":
+                        searchEdt.setHint("동, 면, 읍 명을 검색하세요");
+                        break;
+                    case "tab2":
+                        searchEdt.setHint("지하철 명을 검색하세요");
+                        break;
+                    case "tab3":
+                        searchEdt.setHint("대학교 명을 검색하세요");
+                        break;
+                    case "tab4":
+                        searchEdt.setHint("단지 명을 검색하세요");
+                        break;
+                }
+            }
+        });
+
+        subwayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String station = mDisplaySubwayArray.get(position).getStationName();
+                Intent intent = new Intent(mContext, RoomListActivity.class);
+                intent.putExtra("subway", mDisplaySubwayArray.get(position));
+                intent.putExtra("station", station);
+                startActivity(intent);
+            }
+        });
+
+        searchEdt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterSubwayList(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void filterSubwayList(String inputStr) {
+        mDisplaySubwayArray.clear();
+        if (inputStr.length() > 0) {
+            for (Subway s : GlobalData.stations) {
+                if (s.getStationName().startsWith(inputStr)) {
+                    mDisplaySubwayArray.add(s);
+                }
+            }
+
+            if (mDisplaySubwayArray.size() == 0) {
+                for (Subway s : GlobalData.stations) {
+                    if (SoundSearcher.matchString(s.getStationName(),inputStr)) {
+                        mDisplaySubwayArray.add(s);
+                    }
+                }
+            }
+        } else {
+            mDisplaySubwayArray.addAll(GlobalData.stations);
+        }
+        subwayAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void setValues() {
         tabHost.setCurrentTab(tabNum);
+
+        subwayAdapter = new SubwayAdapter(mContext, mDisplaySubwayArray);
+        subwayListView.setAdapter(subwayAdapter);
     }
 
     @Override
@@ -77,8 +169,10 @@ public class SearchActivity extends BaseActivity {
         this.tab4 = (LinearLayout) findViewById(R.id.tab4);
         this.tab3 = (LinearLayout) findViewById(R.id.tab3);
         this.tab2 = (LinearLayout) findViewById(R.id.tab2);
+        this.subwayListView = (ListView) findViewById(R.id.subwayListView);
         this.tab1 = (LinearLayout) findViewById(R.id.tab1);
         this.tabs = (TabWidget) findViewById(android.R.id.tabs);
+        this.searchEdt = (EditText) findViewById(R.id.searchEdt);
         this.closeBtn = (TextView) findViewById(R.id.closeBtn);
     }
 }

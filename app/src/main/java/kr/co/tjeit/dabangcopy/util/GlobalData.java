@@ -3,9 +3,10 @@ package kr.co.tjeit.dabangcopy.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import kr.co.tjeit.dabangcopy.data.Realtor;
-import kr.co.tjeit.dabangcopy.data.Room;
-import kr.co.tjeit.dabangcopy.data.User;
+import kr.co.tjeit.dabangcopy.datas.Realtor;
+import kr.co.tjeit.dabangcopy.datas.Room;
+import kr.co.tjeit.dabangcopy.datas.Subway;
+import kr.co.tjeit.dabangcopy.datas.User;
 
 /**
  * Created by user on 2017-08-22.
@@ -16,6 +17,7 @@ public class GlobalData {
     public static List<User> users = new ArrayList<>();
     public static List<Realtor> realtors = new ArrayList<>();
     public static List<Room> allRooms = new ArrayList<>();
+    public static List<Subway> stations = new ArrayList<>();    // 지하철 역 목록
 
     // 더미데이터 쌓기.
     public static void initGlobalData() {
@@ -63,6 +65,52 @@ public class GlobalData {
         allRooms.add(new Room(8, 6500, 0, 3, 26.7, 2, 0,
                 37.570242, 127.058275, "8번방에 대한 설명", realtors.get(0)));
 
+
+        // 4. 지하철 역 목록
+        stations.add(new Subway("종로3가"));
+        // 추가된 지하철 역의 호선
+        stations.get(0).getLines().add("1호선");
+        stations.get(0).getLines().add("3호선");
+        stations.get(0).getLines().add("5호선");
+
+        stations.add(new Subway("왕십리"));
+        stations.get(1).getLines().add("2호선");
+        stations.get(1).getLines().add("5호선");
+        stations.get(1).getLines().add("분당선");
+        stations.get(1).getLines().add("경의중앙선");
+
+        stations.add(new Subway("신림"));
+        stations.get(2).getLines().add("2호선");
+
+        stations.add(new Subway("교대"));
+        stations.get(3).getLines().add("2호선");
+        stations.get(3).getLines().add("3호선");
+
+        stations.add(new Subway("신도림"));
+        stations.get(4).getLines().add("2호선");
+
+
+        stations.add(new Subway("서울대입구"));
+        stations.get(5).getLines().add("2호선");
+
+        stations.add(new Subway("낙성대"));
+        stations.get(6).getLines().add("2호선");
+
+        stations.add(new Subway("방배"));
+        stations.get(7).getLines().add("2호선");
+
+        stations.add(new Subway("서초"));
+        stations.get(8).getLines().add("2호선");
+
+        // 1번 방에서 가까운 역은 종로3가
+        allRooms.get(0).getNearStations().add(stations.get(0));
+        // 2번 방에서 가까운 역은 신림, 교대
+        allRooms.get(1).getNearStations().add(stations.get(2));
+        allRooms.get(1).getNearStations().add(stations.get(3));
+        // 3번 방 왕십리
+        allRooms.get(2).getNearStations().add(stations.get(1));
+        // 6번 방 교대
+        allRooms.get(5).getNearStations().add(stations.get(3));
 
 //        ※ 관계들을 설정
     }

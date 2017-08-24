@@ -1,10 +1,8 @@
 package kr.co.tjeit.dabangcopy;
 
 import android.app.FragmentManager;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -12,13 +10,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.Locale;
 
 import kr.co.tjeit.dabangcopy.adapter.PhotoViewPagerAdapter;
-import kr.co.tjeit.dabangcopy.data.Room;
+import kr.co.tjeit.dabangcopy.datas.Room;
 
 public class ViewRoomDetailActivity extends BaseActivity implements OnMapReadyCallback {
 

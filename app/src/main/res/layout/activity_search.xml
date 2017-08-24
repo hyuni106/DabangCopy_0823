@@ -24,6 +24,7 @@
             android:layout_marginRight="20dp"/>
 
         <EditText
+            android:id="@+id/searchEdt"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginRight="10dp"
@@ -66,6 +67,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
+                    <ListView
+                        android:id="@+id/subwayListView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"></ListView>
+
+
 
                 </LinearLayout>
 

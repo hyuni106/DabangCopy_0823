@@ -1,4 +1,4 @@
-package kr.co.tjeit.dabangcopy.data;
+package kr.co.tjeit.dabangcopy.datas;
 
 import java.io.Serializable;
 import java.util.ArrayList;

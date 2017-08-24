@@ -2,7 +2,6 @@ package kr.co.tjeit.dabangcopy;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -12,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kr.co.tjeit.dabangcopy.adapter.RoomAdapter;
-import kr.co.tjeit.dabangcopy.data.Room;
+import kr.co.tjeit.dabangcopy.datas.Room;
+import kr.co.tjeit.dabangcopy.datas.Subway;
 import kr.co.tjeit.dabangcopy.util.GlobalData;
 
 public class RoomListActivity extends BaseActivity {
@@ -25,28 +25,29 @@ public class RoomListActivity extends BaseActivity {
     boolean isTwoRoomSelected = true;
     boolean isThreeRoomSelected = true;
     int minDeposit = 0;
-    int maxDeposit = 0;
+    int maxDeposit = 50000;
 
     private android.widget.ListView roomListView;
     //    필터되서 출력될 수 있도록 지원해주는 출력용 리스트
     List<Room> mDisplayRoomArray = new ArrayList<>();
     RoomAdapter mAdapter;
     private android.widget.ImageView filterBtn;
+    Subway mSubway;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_room_list);
 //        임시로, 이곳에서 GlobalData에 더미데이터를 채워넣음.
-        GlobalData.initGlobalData();
 //        원하는리스트.addAll(원본리스트)?
 //        원본 리스트에 있는 모든 내용물을 복사해서 원하는 리스트에 추가해주는 메쏘드
 //        차후에 필터를 동작시키기 위해 mDisplayRoomArray를 활용하는 방안으로 코딩.
-        mDisplayRoomArray.addAll(GlobalData.allRooms);
-
+//        mDisplayRoomArray.addAll(GlobalData.allRooms);
+        mSubway = (Subway) getIntent().getSerializableExtra("subway");
         bindViews();
         setupEvents();
         setValues();
+        roomFilter();
     }
 
     @Override
@@ -70,10 +71,16 @@ public class RoomListActivity extends BaseActivity {
     private void roomFilter() {
         mDisplayRoomArray.clear();
 
+        boolean payTypeOk;
+        boolean roomTypeOk;
+        boolean depositOk;
+        boolean subwayOk;
+
         for (Room room : GlobalData.allRooms) {
-            boolean payTypeOk = false;
-            boolean roomTypeOk = false;
-            boolean depositOk = false;
+            payTypeOk = false;
+            roomTypeOk = false;
+            depositOk = false;
+            subwayOk = false;
 
             if (isMonthPaySelected) {
                 if (room.getRentPay() != 0) {
@@ -109,7 +116,21 @@ public class RoomListActivity extends BaseActivity {
                 depositOk = true;
             }
 
-            if (payTypeOk && roomTypeOk && depositOk) {
+            // contains를 바로 사용하면 제대로 동작하지 않음
+            // contains : 내부에서 입력되는 객체와 같은게 있는지 검사
+            // equals 메소드 활용 > 제대로 동작하지 않음
+            // ※ Subway 클래스의 equals 메소드를 오버라이딩
+            if (room.getNearStations().contains(mSubway)) {
+                subwayOk = true;
+            }
+
+//            for (Subway sw : room.getNearStations()) {
+//                if (sw.getStationName().equals(mSubway.getStationName())) {
+//                    subwayOk = true;
+//                }
+//            }
+
+            if (payTypeOk && roomTypeOk && depositOk && subwayOk) {
                 mDisplayRoomArray.add(room);
             }
         }
@@ -139,6 +160,8 @@ public class RoomListActivity extends BaseActivity {
 
     @Override
     public void setValues() {
+        mDisplayRoomArray.clear();
+
         mAdapter = new RoomAdapter(mContext, mDisplayRoomArray);
         roomListView.setAdapter(mAdapter);
     }

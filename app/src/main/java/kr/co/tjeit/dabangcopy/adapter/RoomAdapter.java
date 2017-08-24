@@ -7,14 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
 import java.util.Locale;
 
 import kr.co.tjeit.dabangcopy.R;
-import kr.co.tjeit.dabangcopy.data.Room;
+import kr.co.tjeit.dabangcopy.datas.Room;
 
 /**
  * Created by user on 2017-08-22.

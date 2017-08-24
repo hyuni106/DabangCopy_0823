@@ -47,6 +47,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupEvents() {
+        // 검색용 버튼들은 하는 일이 모두 비슷함
+        // onClickListener 변수 생성
         View.OnClickListener intentTab = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,6 +59,7 @@ public class HomeFragment extends Fragment {
             }
         };
 
+        // 4개의 버튼에 공통된 업무 부여
         locationSearchLayout.setOnClickListener(intentTab);
         subwaySearchLayout.setOnClickListener(intentTab);
         univSearchLayout.setOnClickListener(intentTab);

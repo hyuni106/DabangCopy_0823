@@ -1,4 +1,4 @@
-package kr.co.tjeit.dabangcopy.data;
+package kr.co.tjeit.dabangcopy.datas;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,6 +32,8 @@ public class Room implements Serializable {
 //    사진 주소 목록
     private List<String> photoURLs = new ArrayList<>();
 
+    // 가까운 지하철 역 목록
+    private List<Subway> nearStations = new ArrayList<>();
 
     public Room() {
     }
@@ -48,6 +50,14 @@ public class Room implements Serializable {
         this.longitude = longitude;
         this.description = description;
         this.manager = manager;
+    }
+
+    public List<Subway> getNearStations() {
+        return nearStations;
+    }
+
+    public void setNearStations(List<Subway> nearStations) {
+        this.nearStations = nearStations;
     }
 
     public int getRoomId() {

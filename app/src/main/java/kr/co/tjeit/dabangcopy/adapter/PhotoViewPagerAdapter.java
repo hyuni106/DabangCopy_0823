@@ -16,7 +16,6 @@ import java.util.List;
 
 import kr.co.tjeit.dabangcopy.DetailViewImageActivity;
 import kr.co.tjeit.dabangcopy.R;
-import kr.co.tjeit.dabangcopy.data.Room;
 
 /**
  * Created by user on 2017-08-22.
