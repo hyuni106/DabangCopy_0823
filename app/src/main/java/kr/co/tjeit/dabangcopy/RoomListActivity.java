@@ -13,6 +13,7 @@ import java.util.List;
 import kr.co.tjeit.dabangcopy.adapter.RoomAdapter;
 import kr.co.tjeit.dabangcopy.datas.Room;
 import kr.co.tjeit.dabangcopy.datas.Subway;
+import kr.co.tjeit.dabangcopy.datas.University;
 import kr.co.tjeit.dabangcopy.util.GlobalData;
 
 public class RoomListActivity extends BaseActivity {
@@ -33,6 +34,7 @@ public class RoomListActivity extends BaseActivity {
     RoomAdapter mAdapter;
     private android.widget.ImageView filterBtn;
     Subway mSubway;
+    University mUniversity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,7 @@ public class RoomListActivity extends BaseActivity {
 //        차후에 필터를 동작시키기 위해 mDisplayRoomArray를 활용하는 방안으로 코딩.
 //        mDisplayRoomArray.addAll(GlobalData.allRooms);
         mSubway = (Subway) getIntent().getSerializableExtra("subway");
+        mUniversity = (University) getIntent().getSerializableExtra("univ");
         bindViews();
         setupEvents();
         setValues();
@@ -75,12 +78,14 @@ public class RoomListActivity extends BaseActivity {
         boolean roomTypeOk;
         boolean depositOk;
         boolean subwayOk;
+        boolean universityOk;
 
         for (Room room : GlobalData.allRooms) {
             payTypeOk = false;
             roomTypeOk = false;
             depositOk = false;
             subwayOk = false;
+            universityOk = false;
 
             if (isMonthPaySelected) {
                 if (room.getRentPay() != 0) {
@@ -116,21 +121,23 @@ public class RoomListActivity extends BaseActivity {
                 depositOk = true;
             }
 
-            // contains를 바로 사용하면 제대로 동작하지 않음
-            // contains : 내부에서 입력되는 객체와 같은게 있는지 검사
-            // equals 메소드 활용 > 제대로 동작하지 않음
-            // ※ Subway 클래스의 equals 메소드를 오버라이딩
-            if (room.getNearStations().contains(mSubway)) {
+            if (mSubway != null) {
+                if (room.getNearStations().contains(mSubway)) {
+                    subwayOk = true;
+                }
+            } else {
                 subwayOk = true;
             }
 
-//            for (Subway sw : room.getNearStations()) {
-//                if (sw.getStationName().equals(mSubway.getStationName())) {
-//                    subwayOk = true;
-//                }
-//            }
+            if (mUniversity != null) {
+                if (room.getNearUniversities().contains(mUniversity)) {
+                    universityOk = true;
+                }
+            } else  {
+                universityOk = true;
+            }
 
-            if (payTypeOk && roomTypeOk && depositOk && subwayOk) {
+            if (payTypeOk && roomTypeOk && depositOk && subwayOk && universityOk) {
                 mDisplayRoomArray.add(room);
             }
         }

@@ -12,11 +12,69 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <fragment
+        <LinearLayout
             android:id="@+id/homeFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            class="kr.co.tjeit.dabangcopy.fragment.HomeFragment"/>
+            android:layout_height="match_parent">
+
+            <fragment
+                class="kr.co.tjeit.dabangcopy.fragment.HomeFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/myProfileFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <fragment
+                class="kr.co.tjeit.dabangcopy.fragment.MyProfileFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/favoriteListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <fragment
+                class="kr.co.tjeit.dabangcopy.fragment.FavoriteListFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/mapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <fragment
+                class="kr.co.tjeit.dabangcopy.fragment.MapListFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/seeMoreFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <fragment
+                class="kr.co.tjeit.dabangcopy.fragment.SeeMoreFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
 
     </FrameLayout>
 
@@ -28,7 +86,119 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/line_divider"/>
+            android:background="@color/line_divider" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:tag="0"
+                android:id="@+id/homeTabLayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@mipmap/ic_launcher_round"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="홈"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:tag="1"
+                android:id="@+id/favoriteTabLayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@mipmap/ic_launcher_round"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="관심목록"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:tag="2"
+                android:id="@+id/mapTabLayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@mipmap/ic_launcher_round"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="지도"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:tag="3"
+                android:id="@+id/myProfileabLayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@mipmap/ic_launcher_round"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="My"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:tag="4"
+                android:id="@+id/seeMoreTabLayout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_weight="1">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@mipmap/ic_launcher_round"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="더보기"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 

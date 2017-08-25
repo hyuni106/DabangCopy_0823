@@ -18,7 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kr.co.tjeit.dabangcopy.adapter.SubwayAdapter;
+import kr.co.tjeit.dabangcopy.adapter.UniversityAdapter;
 import kr.co.tjeit.dabangcopy.datas.Subway;
+import kr.co.tjeit.dabangcopy.datas.University;
 import kr.co.tjeit.dabangcopy.util.GlobalData;
 import kr.co.tjeit.dabangcopy.util.SoundSearcher;
 
@@ -37,13 +39,16 @@ public class SearchActivity extends BaseActivity {
     private android.widget.EditText searchEdt;
     private android.widget.ListView subwayListView;
     List<Subway> mDisplaySubwayArray = new ArrayList<>();
+    List<University> mDisplayUnivArray = new ArrayList<>();
     SubwayAdapter subwayAdapter;
+    private ListView univListView;
+    UniversityAdapter universityAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        mDisplaySubwayArray.addAll(GlobalData.stations);
+
         tabNum = getIntent().getIntExtra("tab", 0);
         bindViews();
         makeTabHost();
@@ -53,7 +58,7 @@ public class SearchActivity extends BaseActivity {
 
     private void makeTabHost() {
         // 탭호스트를 사용하기 위해서는 반드시 setup을 먼저 진행해야함
-        tabHost.setup() ;
+        tabHost.setup();
 
         // 탭에 들어가는 버튼(tabspec)을 생성하는 작업
         // 구별자(tab1), 표시(지역) 세팅
@@ -62,14 +67,14 @@ public class SearchActivity extends BaseActivity {
         tabHost.addTab(ts1);
 
         TabHost.TabSpec ts2 = tabHost.newTabSpec("tab2").setIndicator("지하철");
-        ts2.setContent(R.id.tab2) ;
-        tabHost.addTab(ts2) ;
+        ts2.setContent(R.id.tab2);
+        tabHost.addTab(ts2);
 
-        TabHost.TabSpec ts3 = tabHost.newTabSpec("tab3").setIndicator("대학교") ;
-        ts3.setContent(R.id.tab3) ;
-        tabHost.addTab(ts3) ;
+        TabHost.TabSpec ts3 = tabHost.newTabSpec("tab3").setIndicator("대학교");
+        ts3.setContent(R.id.tab3);
+        tabHost.addTab(ts3);
 
-        TabHost.TabSpec ts4 = tabHost.newTabSpec("tab4").setIndicator("단지") ;
+        TabHost.TabSpec ts4 = tabHost.newTabSpec("tab4").setIndicator("단지");
         ts4.setContent(R.id.tab4);
         tabHost.addTab(ts4);
     }
@@ -86,6 +91,7 @@ public class SearchActivity extends BaseActivity {
         tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
+                searchEdt.setText("");
                 switch (tabId) {
                     case "tab1":
                         searchEdt.setHint("동, 면, 읍 명을 검색하세요");
@@ -106,10 +112,17 @@ public class SearchActivity extends BaseActivity {
         subwayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String station = mDisplaySubwayArray.get(position).getStationName();
                 Intent intent = new Intent(mContext, RoomListActivity.class);
                 intent.putExtra("subway", mDisplaySubwayArray.get(position));
-                intent.putExtra("station", station);
+                startActivity(intent);
+            }
+        });
+
+        univListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(mContext, RoomListActivity.class);
+                intent.putExtra("univ", mDisplayUnivArray.get(position));
                 startActivity(intent);
             }
         });
@@ -122,7 +135,11 @@ public class SearchActivity extends BaseActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                filterSubwayList(s.toString());
+                if (tabHost.getCurrentTab() == 1) {
+                    filterSubwayList(s.toString());
+                } else if (tabHost.getCurrentTab() == 2) {
+                    filterUnivList(s.toString());
+                }
             }
 
             @Override
@@ -130,6 +147,30 @@ public class SearchActivity extends BaseActivity {
 
             }
         });
+    }
+
+    private void filterUnivList(String inputStr) {
+        mDisplayUnivArray.clear();
+        if (inputStr.length() > 0) {
+            for (University univ : GlobalData.universities) {
+                if (univ.getName().startsWith(inputStr)) {
+                    mDisplayUnivArray.add(univ);
+                }
+            }
+
+            if (mDisplayUnivArray.size() == 0) {
+                for (University univ : GlobalData.universities) {
+                    if (SoundSearcher.matchString(univ.getName(), inputStr)) {
+                        mDisplayUnivArray.add(univ);
+                    }
+                }
+            }
+        } else {
+            mDisplayUnivArray.addAll(GlobalData.universities);
+        }
+        if (universityAdapter != null) {
+            universityAdapter.notifyDataSetChanged();
+        }
     }
 
     private void filterSubwayList(String inputStr) {
@@ -143,7 +184,7 @@ public class SearchActivity extends BaseActivity {
 
             if (mDisplaySubwayArray.size() == 0) {
                 for (Subway s : GlobalData.stations) {
-                    if (SoundSearcher.matchString(s.getStationName(),inputStr)) {
+                    if (SoundSearcher.matchString(s.getStationName(), inputStr)) {
                         mDisplaySubwayArray.add(s);
                     }
                 }
@@ -151,15 +192,22 @@ public class SearchActivity extends BaseActivity {
         } else {
             mDisplaySubwayArray.addAll(GlobalData.stations);
         }
-        subwayAdapter.notifyDataSetChanged();
+        if (subwayAdapter != null) {
+            subwayAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
     public void setValues() {
         tabHost.setCurrentTab(tabNum);
 
+//        mDisplaySubwayArray.addAll(GlobalData.stations);
         subwayAdapter = new SubwayAdapter(mContext, mDisplaySubwayArray);
         subwayListView.setAdapter(subwayAdapter);
+
+//        mDisplayUnivArray.addAll(GlobalData.universities);
+        universityAdapter = new UniversityAdapter(mContext, mDisplayUnivArray);
+        univListView.setAdapter(universityAdapter);
     }
 
     @Override
@@ -168,6 +216,7 @@ public class SearchActivity extends BaseActivity {
         this.tabcontent = (FrameLayout) findViewById(android.R.id.tabcontent);
         this.tab4 = (LinearLayout) findViewById(R.id.tab4);
         this.tab3 = (LinearLayout) findViewById(R.id.tab3);
+        this.univListView = (ListView) findViewById(R.id.univListView);
         this.tab2 = (LinearLayout) findViewById(R.id.tab2);
         this.subwayListView = (ListView) findViewById(R.id.subwayListView);
         this.tab1 = (LinearLayout) findViewById(R.id.tab1);

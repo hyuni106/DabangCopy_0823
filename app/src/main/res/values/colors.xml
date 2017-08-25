@@ -11,6 +11,8 @@
     <color name="dabang_gray">#58585A</color>
     <color name="dabang_yellow">#F68F00</color>
 
+    <color name="text_color">#414141</color>
+
     <!--월세를 나타내는 색-->
     <color name="month_pay_color">#0C58ED</color>
     <!--전세를 나타내는 색-->
