@@ -10,15 +10,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-import android.webkit.ValueCallback;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import kr.co.tjeit.dabangcopy.util.ContextUtil;
 
 public class SettingMyProfileActivity extends BaseActivity {
 
@@ -28,6 +28,11 @@ public class SettingMyProfileActivity extends BaseActivity {
     final int REQ_CODE_SELECT_IMAGE = 100;
     final int REQ_CODE_CAPTURE_IMAGE = 200;
     private de.hdodenhof.circleimageview.CircleImageView profileImageView;
+    private android.widget.TextView loginUserTxt;
+    private TextView changeNameBtn;
+    private android.widget.EditText changeNameEdt;
+    private EditText changePhoneNumEdt;
+    private TextView changePhoneNumBtn;
 
 
     @Override
@@ -76,11 +81,29 @@ public class SettingMyProfileActivity extends BaseActivity {
                 alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        
+                        ContextUtil.logoutProcess(mContext);
+                        finish();
+                        MainActivity.activity.finish();
                     }
                 });
                 alert.setNegativeButton("취소", null);
                 alert.show();
+            }
+        });
+
+        changeNameBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ContextUtil.setLoginUserName(mContext, changeNameEdt.getText().toString());
+                Toast.makeText(mContext, "닉네임이 설정되었습니다.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        changePhoneNumBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ContextUtil.setLoginUserPhoneNum(mContext, changePhoneNumEdt.getText().toString());
+                Toast.makeText(mContext, "번호가 설정되었습니다.", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -139,13 +162,20 @@ public class SettingMyProfileActivity extends BaseActivity {
 
     @Override
     public void setValues() {
-
+        loginUserTxt.setText(ContextUtil.getLoginUser(mContext).getLoginId());
+        changeNameEdt.setText(ContextUtil.getLoginUser(mContext).getName());
+        changePhoneNumEdt.setText(ContextUtil.getLoginUser(mContext).getPhoneNum());
     }
 
     @Override
     public void bindViews() {
         this.logoutBtn = (Button) findViewById(R.id.logoutBtn);
+        this.changePhoneNumBtn = (TextView) findViewById(R.id.changePhoneNumBtn);
+        this.changePhoneNumEdt = (EditText) findViewById(R.id.changePhoneNumEdt);
+        this.changeNameBtn = (TextView) findViewById(R.id.changeNameBtn);
+        this.changeNameEdt = (EditText) findViewById(R.id.changeNameEdt);
         this.imageChangeBtn = (Button) findViewById(R.id.imageChangeBtn);
+        this.loginUserTxt = (TextView) findViewById(R.id.loginUserTxt);
         this.profileImageView = (CircleImageView) findViewById(R.id.profileImageView);
     }
 }

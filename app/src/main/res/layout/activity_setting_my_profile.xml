@@ -73,6 +73,7 @@
                         app:civ_border_width="2dp" />
 
                     <TextView
+                        android:id="@+id/loginUserTxt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
@@ -119,13 +120,32 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <EditText
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/gray_round_text_box"
-                    android:hint="조경진"
-                    android:padding="10dp" />
+                    android:layout_marginTop="10dp">
+
+                    <EditText
+                        android:id="@+id/changeNameEdt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/gray_round_text_box"
+                        android:padding="10dp" />
+
+                    <TextView
+                        android:id="@+id/changeNameBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|right"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/gray_round_text_box"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:paddingTop="5dp"
+                        android:text="변경" />
+
+                </FrameLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -142,12 +162,15 @@
                     android:layout_marginTop="10dp">
 
                     <EditText
+                        android:id="@+id/changePhoneNumEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/gray_round_text_box"
+                        android:inputType="phone"
                         android:padding="10dp" />
 
                     <TextView
+                        android:id="@+id/changePhoneNumBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical|right"

@@ -27,10 +27,13 @@ public class MainActivity extends BaseActivity {
     private LinearLayout mapFragment;
     private LinearLayout seeMoreFragment;
 
+    public static MainActivity activity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        activity = this;
         GlobalData.initGlobalData();
 
         try {
